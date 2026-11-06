@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "reviewedDate": "2026-11-06",
+  "files": [
+    {
+      "source": "apps/api/host.json",
+      "sourceSha256": "eccaff2b4c62030b7b1a43bbfee282adbbc651e4398a7b925210a5868917a94d",
+      "publicFile": "sample-api/host.json",
+      "changes": "Neutral labels/environment name; source logic retained"
+    },
+    {
+      "source": "apps/api/tsconfig.json",
+      "sourceSha256": "936783190d2f87259449e2b3e6e6079572e80da09185001fd4795cf45b2fbfbe",
+      "publicFile": "sample-api/tsconfig.json",
+      "changes": "Neutral labels/environment name; source logic retained"
+    },
+    {
+      "source": "apps/api/tsconfig.build.json",
+      "sourceSha256": "99e84210993b0e2c30c3e4790d8a47a29db04d20e5ca61e98198c9a62bf57a81",
+      "publicFile": "sample-api/tsconfig.build.json",
+      "changes": "Neutral labels/environment name; source logic retained"
+    },
+    {
+      "source": "apps/api/src/functions/health.ts",
+      "sourceSha256": "fa357f28c2bfc5e5960a0e4b2d39a4e41861cb3fd22ef5b94f72c17f7e1e94d8",
+      "publicFile": "sample-api/src/functions/health.ts",
+      "changes": "Neutral labels/environment name; source logic retained"
+    },
+    {
+      "source": "scripts/nonproduction_app_release.py",
+      "sourceSha256": "cdae13d08c3de74125a27e37217f840a0de2fa375c738e75f1effea89771aa9f",
+      "publicFile": "reference/release_package.py",
+      "changes": "Extract actual package/verify/sha/require; omit Azure/publisher/CLI; substitute health-only public isolation fixture and empty business-route addition set"
+    },
+    {
+      "source": "scripts/rollback_package_diagnostics.py",
+      "sourceSha256": "ade37301b0e765d10b8f071c0f28cceca52b3beb3e6acac6605b47e53c6842cf",
+      "publicFile": "reference/package_diagnostics.py",
+      "changes": "Neutral labels/environment name; source logic retained"
+    },
+    {
+      "source": "scripts/test_rollback_package_diagnostics.py",
+      "sourceSha256": "877b607887787bc070e77b02914de462a9c5257c4dd00669da87c08d86baff91",
+      "publicFile": "reference/test_package_diagnostics.py",
+      "changes": "Original diagnostics tests; portable imports only"
+    },
+    {
+      "source": "infra/modules/workforce-api/main.tf",
+      "sourceSha256": "cf8e38d17c698c85d6f0f68e5ea4f101e90434d26837f66b21ecf8f09c105a91",
+      "publicFile": "infra/main.tf",
+      "changes": "Neutral labels/environment name; adaptation detailed in SOURCE-MAP"
+    },
+    {
+      "source": "infra/modules/workforce-api/variables.tf",
+      "sourceSha256": "c6335213b68391700992d6896972f71cad1ecd162806d34a86aacf8368bc3f6a",
+      "publicFile": "infra/variables.tf",
+      "changes": "Neutral labels/environment name; adaptation detailed in SOURCE-MAP"
+    },
+    {
+      "source": "infra/modules/workforce-api/outputs.tf",
+      "sourceSha256": "370d1b119b8363f867af7a886f5e2125e49d1cadbdb6ebfe40e3a31711a9ada6",
+      "publicFile": "infra/outputs.tf",
+      "changes": "Neutral labels/environment name; adaptation detailed in SOURCE-MAP"
+    },
+    {
+      "source": "infra/modules/workforce-api/versions.tf",
+      "sourceSha256": "b88fcfef92a8571378d3376a6d7e2b7478df1fcaaecfcf56b8ec5e2c831a6118",
+      "publicFile": "infra/versions.tf",
+      "changes": "Neutral labels/environment name; adaptation detailed in SOURCE-MAP"
+    }
+  ],
+  "minimalApi": "Public sample only retains the actual health handler. It is not the full business API.",
+  "tests": "Health/package fixture tests are newly authored; diagnostic tests are original selected source tests.",
+  "sourceAreaLabels": "Private product prefixes are rendered as workforce in public area labels; hashes still identify the original input bytes."
+}

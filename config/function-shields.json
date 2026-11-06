@@ -1,0 +1,5 @@
+{
+  "api": {
+    "AzureWebJobs.health.Disabled": "true"
+  }
+}

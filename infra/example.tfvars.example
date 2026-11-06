@@ -1,0 +1,13 @@
+subscription_id = "00000000-0000-4000-8000-000000000001"
+name = "func-example-node-api"
+resource_group_name = "rg-example-app"
+location = "eastus2"
+service_plan_id = "/subscriptions/00000000-0000-4000-8000-000000000001/resourceGroups/rg-example-app/providers/Microsoft.Web/serverFarms/plan-example-flex"
+deployment_container_endpoint = "https://exampledeployment.blob.core.windows.net/function-releases"
+enabled = false
+integration_subnet_id = "/subscriptions/00000000-0000-4000-8000-000000000001/resourceGroups/rg-example-network/providers/Microsoft.Network/virtualNetworks/vnet-example/subnets/functions"
+application_insights_connection_string = "InstrumentationKey=00000000-0000-4000-8000-000000000002"
+application_insights_key = "00000000-0000-4000-8000-000000000002"
+allowed_origins = ["https://portal.example.invalid"]
+app_settings = { "WORKFORCE_ENVIRONMENT" = "nonproduction", "AzureWebJobs.health.Disabled" = "true" }
+tags = { environment = "reference", owner = "engineering" }

@@ -1,0 +1,20 @@
+{
+  "title": "Deploying a Node.js API on Azure Functions",
+  "domain": "NODE.JS / TYPESCRIPT / FLEX CONSUMPTION / ARTIFACT PROMOTION",
+  "subtitle": "Compile, package, verify and promote the selected API bytes.",
+  "scenario": "An operational workforce API needs repeatable Node.js releases without copying broad credentials, shipping test files or silently activating background functions.",
+  "outcome": "Make the runtime, build output, deployment identity and release artifact explicit before publication.",
+  "flow": [
+    "Install locked Node dependencies",
+    "Compile production TypeScript entrypoints",
+    "Package runtime files with the actual release helper",
+    "Verify source, digest and function registration profile",
+    "Publish through the separately controlled Flex release path"
+  ],
+  "notes": [
+    "The minimal API retains the actual platform health handler, host configuration and TypeScript build shape.",
+    "This dashboard runs actual package checks on fictional compiled inputs; Node build/handler checks are separately recorded.",
+    "No Azure Functions host, cloud deployment or production integration is claimed by these screenshots."
+  ],
+  "boundary": "Actual package/handler/infrastructure source with fictional offline package fixtures. No cloud publish or service start."
+}
