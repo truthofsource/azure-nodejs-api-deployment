@@ -1,5 +1,7 @@
 # Troubleshooting a Node API release
 
+**Terms used here:** An artifact is a file produced for a release, such as an application ZIP or container image. DNS turns a service name into the network address used to reach it.
+
 | Symptom | Likely investigation | Safe next step |
 | --- | --- | --- |
 | No Functions found | package main glob, dist root, app.http imports/registrations, build output | Inspect the ZIP root and compiled entrypoint paths before publishing again |

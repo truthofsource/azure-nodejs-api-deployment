@@ -1,5 +1,7 @@
 # Source map and deliberate public adaptations
 
+**Terms used here:** A fixture is test data or a test setup used instead of real business records.
+
 | Public source | Relationship |
 | --- | --- |
 | sample-api/src/functions/health.ts | Actual handler; neutral service/environment labels |

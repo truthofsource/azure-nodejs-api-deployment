@@ -1,5 +1,7 @@
 # Build and package the Node application
 
+**Terms used here:** A digest is a file or container fingerprint used to confirm the exact version.
+
 1. npm ci installs the reviewed lockfile. The minimal sample pins @azure/functions 4.16.1, TypeScript 5.9.3 and Node types 22.20.0 from the platform's selected lockfile versions.
 2. Production TypeScript compilation excludes *.test.ts. The real output glob is dist/src/functions/*.js, matching package.json main. Changing rootDir/outDir without changing that entrypoint can leave the host with no discoverable Functions.
 3. Run handler and release tests before removing development dependencies. The real platform additionally has business/SQL/browser/security suites; the small public sample does not reproduce their full coverage.
@@ -18,7 +20,7 @@ npm prune --prefix sample-api --omit=dev --ignore-scripts --no-audit --no-fund
 python -B scripts/package-local.py --source-sha <full-reviewed-40-character-sha>
 ```
 
-Use a real selected commit when making a real archive. The command only creates .release/release.zip and release.json and verifies them locally; it uploads nothing. Re-run npm ci before compiling again because TypeScript was a development dependency. The receipt alone cannot establish trusted source provenance.
+Use a real selected commit when making a real archive. The command only creates .release/release.zip and release.json and verifies them locally; it uploads nothing. Re-run npm ci before compiling again because TypeScript was a development dependency. The receipt alone does not prove that the files came from the claimed source code.
 
 ## Linux and native dependencies
 

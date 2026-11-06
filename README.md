@@ -1,6 +1,6 @@
 # Deploying a Node.js API on Azure Functions
 
-**Compile, package, verify and promote the selected API bytes.**
+**Package and release the server code that was tested, without rebuilding it at the last minute.**
 
 [The problem](#the-business-problem) · [The solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
 
@@ -8,17 +8,13 @@
 
 ## The Business Problem
 
-A healthcare-services workforce platform runs its operational API in Node.js. A release needs the correct compiled entrypoints and runtime dependencies, scoped cloud access and a traceable package. Shipping the wrong build or activating a worker accidentally can affect onboarding, payroll and operational records.
-
-1. **Source is not a deployable package:** TypeScript, tests, source maps and development tooling need a deliberate build/output boundary.
-2. **Working on Windows is not Linux acceptance:** production dependencies can contain native binaries whose OS/architecture matters.
-3. **Publication is not activation:** deploying a ZIP should not silently enable email, signing, providers or directory writes.
+The platform’s server handles requests for onboarding, payroll and other daily work. Releasing the wrong files, missing required software, or accidentally turning on background jobs can disrupt those processes. A successful build on a Windows computer also does not prove the release will run correctly on Linux.
 
 ## The Solution
 
-Use Azure Functions' Node.js v4 programming model on a Node 22 Flex Consumption host. Build the TypeScript API, stage runtime dependencies, create a deterministic archive, verify source/digest/Function registration and publish through the environment's controlled release path. Promote the selected artifact instead of rebuilding it.
+Build the Node.js server, package the files it needs, and check the package before publishing it to Azure Functions. Keep a fingerprint of the tested file and use that same file for the release. Treat turning on email, signing or background work as a separate setting.
 
-**Business outcome:** Reduce release ambiguity and keep operational settings, identities and background-work activation separate from code publication.
+**Business outcome:** Make releases easier to trace and reduce the chance that publishing code changes unrelated operating settings.
 
 ### Actual platform implementation
 
@@ -61,7 +57,7 @@ This is a Functions package deployment, not an ACR container deployment. A ZIP f
 
 ## Proof It Works
 
-**Local validation:** 16 code tests, four direct HTTP checks, six demo assertions and three Terraform mock tests passed. No cloud deployment.
+**Local validation:** 16 code tests, four direct HTTP checks, six demo assertions and three Terraform tests using simulated cloud responses passed. No cloud deployment.
 
 ### 1. Build and invoke the actual handler
 
@@ -90,7 +86,7 @@ terraform -chdir=infra validate
 terraform -chdir=infra test
 ```
 
-**Look for:** three mock tests verify Node 22/default pause, system-assigned deployment identity/HTTPS and outbound network/scale settings. Mock tests do not prove actual role grants, private routes or app startup.
+**Look for:** three tests using simulated cloud responses verify Node 22/default pause, system-assigned deployment identity/HTTPS and outbound network/scale settings. Mock tests do not prove actual role grants, private routes or app startup.
 
 ### 4. Visible local evidence
 
@@ -124,14 +120,14 @@ Open [the packaging workbench](http://127.0.0.1:8011). On PowerShell, use npm.cm
 2. Compile and test; stage production dependencies, required migration/template assets and configuration without private secrets.
 3. Create the archive/receipt and verify entrypoints, path safety, source/digest and the explicit Function commissioning profile.
 4. Publish to nonproduction through the supported Flex deployment path, verify the actual runtime and restore the environment's original power/settings state.
-5. Archive/preflight the verified artifact, then promote the same selected bytes through the production publisher. Do not rebuild during promotion.
+5. Save and check the verified release package, then publish that same package to production. Do not rebuild during promotion.
 6. Verify health, protected routes and downstream compatibility separately. A public health 200 is not a SQL/Blob/Entra authorization test.
 
 This repository supplies the build/validation reference, not a live cloud publisher. The real platform's ordinary publisher and exact-release authorization remain outside this public sample. [Pipeline and deployment guide](docs/DEPLOYMENT.md).
 
 ## Security Practices
 
-- The sample health endpoint is intentionally anonymous and contains no employee data. Business routes require separate token, role and record authorization.
+- The sample health endpoint is intentionally anonymous and contains no employee data. Business routes require separate token, role and permission checks for the specific record.
 - CORS restricts browser-origin behavior; it does not authenticate a caller. Outbound VNet integration does not make inbound HTTP private.
 - Deployment identity, runtime identity and privileged directory-worker authority have separate responsibilities and grants.
 - A source SHA in a locally generated receipt is a selection label, not independent proof that the build came from a trusted checkout. Trusted CI/archive evidence is still required.

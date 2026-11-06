@@ -55,4 +55,4 @@ terraform -chdir=infra validate
 terraform -chdir=infra test
 ```
 
-Expected: three mock tests and no resource apply. The default host is Disabled. Example dependencies are placeholders, not a complete cloud environment.
+Expected: three tests using simulated cloud responses and no resource apply. The default host is Disabled. Example dependencies are placeholders, not a complete cloud environment.

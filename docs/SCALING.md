@@ -1,5 +1,7 @@
 # Scaling, costs, strengths and tradeoffs
 
+**Terms used here:** An artifact is a file produced for a release, such as an application ZIP or container image. Role-based access control gives people or services permissions according to their roles.
+
 | Design | Strength | Tradeoff | Growth response |
 | --- | --- | --- | --- |
 | Node event loop | Efficient I/O-oriented request handling | CPU-heavy synchronous work can block the loop | Measure event-loop lag; separate CPU-heavy jobs and bound work |

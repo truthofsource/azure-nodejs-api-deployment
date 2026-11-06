@@ -12,4 +12,4 @@ terraform -chdir=infra validate
 terraform -chdir=infra test
 ```
 
-Three mock tests inspect runtime/pause, identity/HTTPS and network/scale values. The selected provider version is retained in the signed lockfile. Mock plans do not access Azure or prove that the example inputs can be commissioned. Real settings, secrets, plans and state remain private.
+Three tests using simulated cloud responses inspect runtime/pause, identity/HTTPS and network/scale values. The selected provider version is retained in the signed lockfile. Mock plans do not access Azure or prove that the example inputs can be commissioned. Real settings, secrets, plans and state remain private.

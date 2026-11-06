@@ -1,5 +1,7 @@
 # Validation — November 6, 2026
 
+**Terms used here:** An artifact is a file produced for a release, such as an application ZIP or container image. A fixture is test data or a test setup used instead of real business records.
+
 | Executed local check | Result |
 | --- | --- |
 | Minimal TypeScript API compilation | Passed; TypeScript 5.9.3, Node 22.23.2 |
