@@ -47,11 +47,11 @@ This is a Functions package deployment, not an ACR container deployment. A ZIP f
 
 | Component | Purpose | Implementation |
 | --- | --- | --- |
-| Actual TypeScript health handler | Public health contract, environment and timestamp | [Source](sample-api/src/functions/health.ts) |
+| Actual TypeScript health handler | A public health response showing the environment and time | [Source](sample-api/src/functions/health.ts) |
 | Actual build/runtime shape | v4 app.http registration, compiled entrypoint glob, host configuration | [Sample API](sample-api/) |
 | Actual archive builder/verifier | Stable ZIP metadata, required inputs, filtered tests/maps and commissioning checks | [Source](reference/release_package.py) |
 | Original package diagnostic tests | Distinguish repacked ZIP bytes from changed filesystem contents | [Original tests](reference/test_package_diagnostics.py) |
-| Local archive command | Build a receipt and verify locally; no upload/start | [Wrapper](scripts/package-local.py) |
+| Local archive command | Create and check a local release record without uploading files or starting services | [Wrapper](scripts/package-local.py) |
 | Actual Flex host Terraform | Node 22, managed identity, VNet integration, HTTPS and selected scale limits | [Terraform](infra/) |
 | Manual-only workflow | Compile/test, prune dev dependencies and verify the package without publishing | [Workflow](.github/workflows/validate.yml) |
 

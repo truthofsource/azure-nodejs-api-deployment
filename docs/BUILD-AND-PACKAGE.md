@@ -24,6 +24,6 @@ Use a real selected commit when making a real archive. The command only creates 
 
 ## Linux and native dependencies
 
-The full operational API includes native image-processing dependencies. Node major version alone is insufficient: OS, CPU architecture and libc/binary compatibility matter. Do not promote Windows node_modules into the Linux runtime. Use the appropriate Linux build environment and smoke-test native imports and relevant business paths. The minimal public health sample has no such native image-processing dependency and does not prove their compatibility.
+The full server uses image-processing software built for a particular operating system and processor. Matching the Node version alone is not enough. Do not copy Windows node_modules into a Linux release. Build the packages for Linux and test the relevant features there. The small public health example does not include those packages, so it does not prove they will work.
 
 Deterministic ZIP evidence assumes identical file bytes and packaging/compression toolchain. It does not claim Windows and Linux dependency trees are identical.
