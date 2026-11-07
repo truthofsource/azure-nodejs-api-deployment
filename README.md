@@ -24,15 +24,30 @@ The platform implementation uses locked Node dependencies, production TypeScript
 
 The standalone example defaults to a Disabled host, contains no Azure publishing client and has a manual-only validation workflow. [Actual source/adaptations](docs/SOURCE-MAP.md) · [Evidence boundaries](docs/VALIDATION.md).
 
+## Tools Used and What They Do
+
+| Tool or service | What it does | Where it fits |
+| --- | --- | --- |
+| Node.js and TypeScript | Run the server and compile its typed source into JavaScript. | Actual API runtime and source language. |
+| Azure Functions v4 SDK | Register HTTP and background handlers in code. | Actual programming model; not an Express server. |
+| npm | Install the recorded application dependencies and run build commands. | Build/local utility; runtime packaging is checked separately. |
+| GitHub Actions and Azure CLI | Coordinate release checks and inspect/manage the selected Azure target. | Actual operating tools; the public workflow has no cloud publisher credentials. |
+| Terraform | Describe the selected API host configuration. | Reference host module; identities, grants and private paths need their own setup. |
+| Application Insights | Collect runtime diagnostic information. | Actual host configuration; configuration alone does not prove log arrival. |
+| Azure Functions Core Tools and Azurite | Offer an optional local Functions host and storage emulator. | Optional preparation only; default tests do not require or prove this host path. |
+| Python | Run the packaging workbench and archive checks. | Local/reference utility, not the deployed Node.js API runtime. |
+
+The local handler harness and packaging checks remain separate from a hosted Functions invocation, real sign-in and SQL access.
+
 ## Step by Step
 
 A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
 
-1. **Prepare the server code** — Select the reviewed version and its recorded software dependencies. Build and test the server functions that belong in the release.
+1. **Prepare the server code (TypeScript)** — Select the reviewed version and its recorded software dependencies. Build and test the server functions that belong in the release.
 
-2. **Create the release package** — Package the required runtime files and check the contents. Save a file fingerprint so the package can be identified later.
+2. **Create the release package (npm and packaging checks)** — Package the required runtime files and check the contents. Save a file fingerprint so the package can be identified later.
 
-3. **Publish the tested package** — The platform release process sends the verified package to Azure Functions. Settings that activate email or background work remain separate from publishing code.
+3. **Publish the tested package (GitHub Actions)** — The platform release process sends the verified package to Azure Functions. Settings that activate email or background work remain separate from publishing code.
 
 4. **Verify the release** — Check service health and compare the published package with the intended version. This public project tests packaging locally and does not publish a live service.
 
