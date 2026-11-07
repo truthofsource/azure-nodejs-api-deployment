@@ -25,3 +25,9 @@ SDK test mode means the Azure Functions host was not started. The direct HTTP ha
 No Azure query, upload, app/scanner/worker activation, role grant or business operation occurred. The public workflow was not dispatched and uploads no artifact.
 
 Reproduce with [the commands](COMMANDS.md) and [source map](SOURCE-MAP.md).
+
+## Troubleshooting documentation review — November 7, 2026
+
+Added a README incident summary and a linked historical lessons guide, checking the account against the maintained source records. Documentation checks covered local links, complete incident fields, identifying-information patterns, whitespace and preservation of the existing four-step walkthrough. Shared incidents link to the relevant project details; unresolved causes remain explicit.
+
+This was an editorial update. Application code, tests, Terraform, images, workflow definitions and cloud settings were not changed. Existing functional test counts and screenshots above retain their original scope and dates; no application suite, live scan, paid image request, recovery rehearsal or GitHub Actions run was executed for this documentation pass.

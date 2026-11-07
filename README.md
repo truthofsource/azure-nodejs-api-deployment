@@ -149,6 +149,10 @@ This repository supplies the build/validation reference, not a live cloud publis
 
 The selected host source specifies up to ten instances and 2048 MiB per instance. Those settings are not guaranteed throughput. Node event-loop behavior, database pools, trigger concurrency, key-service calls and downstream limits all matter. [Strengths, weaknesses, costs and scaling](docs/SCALING.md).
 
+## Troubleshooting Lessons
+
+A healthy HTTP endpoint did not mean background work was healthy. The recorded repair isolated a conflicting storage setting, then verified listeners and executions. [Read the incident, evidence and verification](docs/LESSONS-LEARNED.md).
+
 ## Project Guides
 
 | Guide | Purpose |
