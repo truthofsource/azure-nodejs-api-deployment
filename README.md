@@ -2,7 +2,7 @@
 
 **Package and release the server code that was tested, without rebuilding it at the last minute.**
 
-[The problem](#the-business-problem) · [The solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md)
+[The problem](#the-business-problem) · [The solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md) · [Step by step](#step-by-step)
 
 ![Actual package checks in the local workbench](docs/images/01-overview.png)
 
@@ -23,6 +23,18 @@ This project includes the platform's real health handler, host/TypeScript config
 The platform implementation uses locked Node dependencies, production TypeScript compilation and development-dependency pruning. Its API host uses system-assigned identity for deployment-container access, outbound VNet integration, HTTPS and disabled basic publishing authentication. The reviewed environment root owns activation/settings and the publisher owns actual release execution.
 
 The standalone example defaults to a Disabled host, contains no Azure publishing client and has a manual-only validation workflow. [Actual source/adaptations](docs/SOURCE-MAP.md) · [Evidence boundaries](docs/VALIDATION.md).
+
+## Step by Step
+
+A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
+
+1. **Prepare the server code** — Select the reviewed version and its recorded software dependencies. Build and test the server functions that belong in the release.
+
+2. **Create the release package** — Package the required runtime files and check the contents. Save a file fingerprint so the package can be identified later.
+
+3. **Publish the tested package** — The platform release process sends the verified package to Azure Functions. Settings that activate email or background work remain separate from publishing code.
+
+4. **Verify the release** — Check service health and compare the published package with the intended version. This public project tests packaging locally and does not publish a live service.
 
 ## Architecture
 
