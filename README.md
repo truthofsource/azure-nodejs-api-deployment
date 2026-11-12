@@ -8,7 +8,11 @@
 
 ## The Business Problem
 
-The platform’s server handles requests for onboarding, payroll and other daily work. Releasing the wrong files, missing required software, or accidentally turning on background jobs can disrupt those processes. A successful build on a Windows computer also does not prove the release will run correctly on Linux.
+The backend accepts applications, records employee work and supports payroll-related administration. A release containing missing packages, outdated compiled code or the wrong configuration can interrupt several teams at once. A successful build on an engineer's computer gives limited assurance about how the package will run on the Linux host.
+
+Publishing code also shares an environment with email senders, signing controls and background processes. Accidentally changing those settings can trigger work outside the intended release. If the package is rebuilt between testing and production, diagnosing a failure becomes harder because the released files may differ from the ones that passed.
+
+The business need was to package and verify a complete server release once, promote the selected files and preserve unrelated operating settings during deployment.
 
 ## The Solution
 
