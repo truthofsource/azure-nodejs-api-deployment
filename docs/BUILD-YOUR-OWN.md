@@ -1,111 +1,160 @@
-# Build your own: Deploying a Node.js API on Azure Functions
+# Build your own from scratch: Azure Nodejs Api Deployment
 
-This is a step-by-step build guide for an independent learning copy. Follow the numbered steps in order and record your own results. The included local implementation is not a complete deployment of the private business platform; cloud extensions are separate and must use your own authorized resources.
+Your own JavaScript Azure Function, tested locally and published to a new Function App.
 
-## What you will create
+Start with a new folder, your own files and your own accounts. The numbered steps below describe the build; no portfolio repository checkout is required. The existing implementation/evidence elsewhere in this repository is a separate reference, not a claim that your new build has already passed.
 
-A checked API package and local health handler; no Azure Functions publication.
+## Prerequisites
 
-## Prerequisites and working locations
+Supported Node LTS, Azure Functions Core Tools v4, Azurite for local host storage, Azure CLI, and an Azure subscription with a budget and permission to create a new Function App/storage account.
 
-| Location | What you need |
-| --- | --- |
-| Your workstation | Git and the runtime versions documented in [the command guide](COMMANDS.md); use its package/lockfile instructions. |
-| Bash, Linux or WSL terminal | The commands below use Bash syntax. Prepare Python 3.12 and the compatible Node.js version documented by the project; use the project's pinned dependency files. |
-| PowerShell alternative | Use the PowerShell forms in the command guide, or run this Bash recipe in WSL; do not paste Bash loops into PowerShell. |
-| Azure or external service | Not needed for default local tests. Any cloud extension requires your own account, target, permissions, budget and acceptance plan. |
+Use Bash on Linux/macOS/WSL for Bash blocks and PowerShell for PowerShell blocks. Select the tool versions supported by the official sources below, record the versions you actually install and retain generated dependency locks. Cloud resources, scanner downloads, logs and external AI calls can create costs; review the stated scope before enabling them.
 
-Read [the existing validation scope](VALIDATION.md) before running anything. A recorded historical test result is not evidence that your new copy has passed.
+## Create your project folder
 
-## Step 1: Create your own workspace
-
-**Where:** your workstation, in a new project folder.
-
-1. Clone the public source below into a new directory; keep the source attribution and included license terms. This creates your local learning copy, not cloud resources.
-2. Record the selected commit and tool versions before editing. If you later publish a fork, review any origin, hash or target bindings rather than disabling guards to make the fork pass.
+Choose a new folder name. These first commands create a blank project; an optional `git init` gives it its own history. Create parent directories in your editor when a later step introduces a nested file.
 
 ```bash
-git clone https://github.com/truthofsource/azure-nodejs-api-deployment.git
-cd azure-nodejs-api-deployment
-git rev-parse HEAD
-git rev-parse --show-toplevel
-git status --short
+mkdir my-azure-nodejs-api-deployment
+cd my-azure-nodejs-api-deployment
+git init
 ```
 
-**Expected result:** the project files are present and you can identify the starting source. Continue from this repository root unless a command explicitly changes directory.
+Create `.gitignore` before saving credentials or build outputs:
 
-## Step 2: Prepare dependencies and build the local baseline
+```gitignore
+.venv/
+node_modules/
+.env
+.env.*
+local.settings.json
+credentials.json
+token.json
+*.pem
+*.key
+*.tfstate*
+*.tfplan
+.terraform/
+private*/
+captures/
+backups/
+batch.json
+reports/
+out/
+app-config.local.yaml
+```
 
-**Where:** the same workstation terminal.
+The source/file snippets are a starting implementation you type or paste into the named files. Replace `YOUR_*`, names, regions and addresses only with values from your own lab; do not place real client/employee records in a test project. Keep your terminal in this project root unless a step explicitly changes directory.
 
-1. Follow the runtime instructions and install only the dependencies selected by this project's files. Terraform provider downloads, optional browser downloads and scanner databases are separate prerequisites where the detailed guide identifies them.
-2. Run these source-derived baseline commands one at a time and stop on an unexpected failure. Read any skipped integration cases; a skip is not a successful live check.
+Before a first commit, set your own repository-local author with `git config user.name "YOUR_NAME"` and `git config user.email "YOUR_PUBLIC_COMMIT_EMAIL"`. Review `git status --short` and the staged diff before publishing; ignored local files are not a substitute for reviewing what you upload.
+
+## Step 1 — Generate a new Functions project
+
+**Where:** Your empty project folder.
+
+Use Core Tools to generate a JavaScript project and an HTTP-trigger template named health. This generator creates your own app; it does not check out the portfolio repository.
 
 ```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-npm ci --prefix sample-api --ignore-scripts --no-audit --no-fund
-npm test --prefix sample-api
-.venv/bin/python -B -m unittest discover -s reference -v
-.venv/bin/python -B -m unittest discover -s tests -v
-.venv/bin/python -B -m lab demo
+func init . --worker-runtime node --language javascript
+func new --template "HTTP trigger" --name health --authlevel anonymous
 ```
 
-**Expected result:** the selected tests finish without unexpected failures, and a demonstration command, where provided, produces fictional local decisions. These commands reproduce the included lab scope; they do not commission the live platform.
+**Check before continuing:** The folder contains host.json, package.json and a health function file.
 
-## Step 3: Make one project-specific change
+## Step 2 — Write the health handler
 
-**Where:** your editor, in your own local copy.
+**Where:** The generated function file under src/functions.
 
-1. Start with [`config/function-shields.json`](../config/function-shields.json) and the matching test or configuration instructions. Change a fictional function setting in a separate example and add a test that rejects a package/config mismatch.
-2. Save your new case separately from the original acceptance records, then rerun the affected tests and the baseline. Do not edit recorded scanner results, screenshots or validation counts to manufacture a successful outcome.
+Replace the generated HTTP function with the code below and confirm package.json main includes that directory. Keep the response limited to service health; never expose environment variables, tokens or database strings.
 
-**Expected result:** you can explain what you changed, why the result changed and which negative case still fails safely. An unexpected failure means investigate the implementation or setup, not remove the failing check.
+Create **`src/functions/health.js`** with the following contents:
 
-## Step 4: Verify behavior and capture your own evidence
+```javascript
+const { app } = require('@azure/functions');
+app.http('health', {
+  methods: ['GET'], authLevel: 'anonymous',
+  handler: async () => ({jsonBody: {service: 'my-api', status: 'ok'}})
+});
+```
 
-**Where:** the test output, local viewer where supplied, and your private evidence folder.
+**Check before continuing:** The function registers GET health through the v4 app model.
 
-1. If the project supplies a viewer, use its startup command in [the command guide](COMMANDS.md); keep long-running preview servers in a separate terminal. Follow its exact loopback address and stop it with Ctrl+C when finished; for a command-line-only example, inspect its terminal output and generated files instead.
-2. Compare your own output with [the proof and limits](../README.md#proof-it-works), then record source version, command, expected result, observed result and unresolved work. Capture screenshots of your own fictional output rather than presenting the existing screenshots as your execution.
+## Step 3 — Run your local host
 
-**Expected result:** A checked API package and local health handler; no Azure Functions publication. Your evidence must say whether it covers local logic, a real tool run, a hosted service or a human observation.
+**Where:** Two workstation terminals.
 
-### Start the local preview
-
-Open a second terminal in the same repository root printed by `git rev-parse --show-toplevel`. Run the command below from that root, after the baseline has passed; it stays running while you use the preview.
+Start Azurite in a separate terminal and confirm the ignored local.settings.json uses your local emulator connection. Run func start, then request /api/health on the port printed by Core Tools.
 
 ```bash
-.venv/bin/python -B -m lab serve --port 8011
+npm install
+func start
+# In a second terminal:
+curl -i http://localhost:7071/api/health
 ```
 
-Open [http://127.0.0.1:8011](http://127.0.0.1:8011). Use the exact hostname shown here; a localhost address and a 127.0.0.1 address are not interchangeable for every project's host checks.
+**Check before continuing:** A real Functions host returns your JSON; local settings are excluded from Git.
 
-The command uses the same Python environment as the baseline where Python is required. This guide uses an explicit virtual-environment executable rather than activating it; when following other project examples that say `python`, use that same executable if the project has a `.venv`. In WSL, keep the clone and its virtual environment in the same Linux environment; do not reuse a Windows `.venv`.
+## Step 4 — Create the Azure host
 
-Keep one preview per listening port. Stop your own earlier preview with Ctrl+C before starting another one on that port, or use only a port override documented by the project. If you stop the preview, rerun only its startup command; you do not need to rebuild or redeploy cloud services.
+**Where:** Azure Portal → Function App → Create.
 
-## Step 5: Plan an independent cloud extension, if needed
+Create a new Linux Function App using a currently supported Node runtime and hosting plan in your isolated group. Choose its storage account, monitoring workspace and identity deliberately; inspect the estimated plan/storage/log costs and network reachability requirements.
 
-**Where:** your own architecture/configuration files first; a separately authorized lab subscription only later.
+**Check before continuing:** The app exists with the selected runtime and reachable host-storage dependencies.
 
-1. Read the implementation and infrastructure references linked below. Substitute your own names, identities, address ranges and service settings in an isolated environment; a public reference may contain only selected components and is not authority to apply someone else's production state.
-2. List the missing integrations and acceptance checks before deployment: runtime hosting, permissions, network/DNS paths, secrets, source data, notification or provider access as applicable. Keep disabled examples disabled until their specific dependencies, costs and cleanup are understood.
+## Step 5 — Publish the project you created
 
-**Expected result:** a scoped extension plan with owners and explicit acceptance criteria, not a claim that the full service is deployed. No cloud `apply`, scanner targeting, paid operation or provider sign-in is implied by the local recipe.
+**Where:** Your project folder.
 
-- [Architecture](ARCHITECTURE.md)
-- [Deployment](DEPLOYMENT.md)
-- [Operations](OPERATIONS.md)
-- [Validation](VALIDATION.md)
-- [Source Map](SOURCE-MAP.md)
-- [Lessons Learned](LESSONS-LEARNED.md)
+Select your intended subscription and publish only to the newly named Function App. Confirm that the package excludes local.settings.json and that required app settings are configured on the host.
 
-## Step 6: Troubleshoot, close out and explain what you built
+```bash
+az login
+az account set --subscription "YOUR_SUBSCRIPTION_ID"
+func azure functionapp publish YOUR_FUNCTION_APP_NAME
+```
 
-**Where:** your project folder and the operating guide for any environment you actually created.
+**Check before continuing:** The publish completes and your hosted /api/health route returns the expected JSON.
 
-1. Check the failing stage in order: working directory and runtime, dependencies, test input, configuration, then any separately enabled service. Preserve the error and consult the existing troubleshooting lessons before widening permissions or changing the target.
-2. Stop only the viewers/containers you started, retain your useful evidence and remove only resources belonging to your own reviewed lab. A local-only run needs no cloud deletion; if you created cloud resources, verify residual storage/address/monitoring charges rather than assuming compute stop removes all cost.
+## Step 6 — Add the identity boundary and verify it
 
-**Finish checklist:** explain the business problem, show your own change and verification, describe one failure/recovery case, identify limitations and name the next owner action. Keep credentials and business records out of public commits and screenshots.
+**Where:** Function App → Authentication.
+
+For staff endpoints, configure Microsoft Entra authentication, the correct audience and restricted user/app access before exposing business data. Test both authorized and unauthenticated calls; function keys, Entra identity and employee ownership are different controls.
+
+**Check before continuing:** You have a health check plus separately recorded access tests, not a claim that health proves all APIs work.
+
+## Step 7 — Capture the release and close the lab
+
+**Where:** Your files and Azure Portal.
+
+Record the runtime, package source, deployment outcome, health response and authentication results. Delete only this dedicated lab group after reviewing retained monitoring/storage costs.
+
+**Check before continuing:** Your own app can be rebuilt from its files and deployment notes.
+
+## Verification and your own screenshots
+
+| Evidence | What to record | Your result |
+| --- | --- | --- |
+| New build | Your own files/resource settings and tool versions | Not yet recorded |
+| Working path | The actual successful request, configuration or recovery result | Not yet recorded |
+| Failure boundary | A meaningful denied, malformed, stale or failed case | Not yet recorded |
+| Recovery / cleanup | What you restored or removed and what remains billed | Not yet recorded |
+
+Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. Existing portfolio images are references, not evidence that you performed these steps.
+
+## Troubleshooting order
+
+1. Confirm the named file, working directory and selected tool/interpreter.
+2. Check the exact input and resource/account selected for the failing step.
+3. Separate identity permission, network/DNS reachability and application validation.
+4. Keep the actual error and reconcile an unknown write outcome before repeating it; do not widen access or repeat paid operations blindly.
+
+The numbered steps describe a build procedure. Local syntax checks, an accepted API request, a completed hosted operation and a human verification are different evidence levels; fill in the verification table with what you actually observed.
+
+## Official implementation references
+
+- [learn.microsoft.com — create-first-function-cli-node](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-cli-node)
+- [learn.microsoft.com — functions-reference-node](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-node)
+
+The walkthrough layout follows the prerequisites → creation/configuration → test → verification → troubleshooting → cleanup pattern of the [Splunk project reference](https://github.com/davidharris6/splunk-siem-log-analysis). Its Splunk-specific settings are not copied into unrelated projects.
