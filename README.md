@@ -1,10 +1,12 @@
 # Deploying a Node.js API on Azure Functions
 
+[![Node.js API on Azure Functions — illustrated overview](docs/diagrams/architecture.png)](docs/diagrams/architecture.svg)
+
+[View SVG](docs/diagrams/architecture.svg) · [Download PNG](docs/diagrams/architecture.png) · [Edit in draw.io](docs/diagrams/architecture.drawio)
+
 **Package and release the server code that was tested, without rebuilding it at the last minute.**
 
 [The problem](#the-business-problem) · [The solution](#the-solution) · [What was built](#what-was-built) · [Proof it works](#proof-it-works) · [Commands](docs/COMMANDS.md) · [Step by step](#step-by-step)
-
-![Actual package checks in the local workbench](docs/images/01-overview.png)
 
 ## The Business Problem
 
@@ -215,7 +217,7 @@ Record the runtime, package source, deployment outcome, health response and auth
 | Failure boundary | A meaningful denied, malformed, stale or failed case | Not yet recorded |
 | Recovery / cleanup | What you restored or removed and what remains billed | Not yet recorded |
 
-Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. Existing portfolio images are references, not evidence that you performed these steps.
+Capture your own architecture/configuration, one working result and one failure/recovery result. Keep tokens, credentials, personal records and private identifiers out of public screenshots. The architecture diagram explains the design; record your own results rather than treating it as execution evidence.
 
 ### Troubleshooting order
 
@@ -251,20 +253,7 @@ A short walkthrough of the process, with technical instructions and evidence lim
 
 ## Architecture
 
-```mermaid
-flowchart LR
-  Source[Reviewed TypeScript + lockfile] --> Install[Linux-compatible locked dependencies]
-  Install --> Build[Compile dist/src/functions]
-  Build --> Tests[Handler / package / diagnostic checks]
-  Tests --> Runtime[Stage production dependencies]
-  Runtime --> ZIP[Deterministic ZIP + source/digest receipt]
-  ZIP --> Verify[Verify archive and function profile]
-  Verify -. separately controlled publish .-> Flex[Node 22 Functions Flex host]
-  Identity[System-assigned identity] --> Store[(Deployment Blob container)]
-  Store --> Flex
-  Flex --> VNet[Outbound VNet integration]
-  Flex --> Logs[Application Insights]
-```
+[View the illustrated project overview](docs/diagrams/architecture.svg).
 
 This is a Functions package deployment, not an ACR container deployment. A ZIP file is the artifact format; Flex uses its supported package-deployment path rather than every legacy ZIP-deploy option. VNet integration is outbound connectivity, not proof that the HTTP endpoint is private.
 
@@ -314,8 +303,6 @@ terraform -chdir=infra test
 **Look for:** three tests using simulated cloud responses verify Node 22/default pause, system-assigned deployment identity/HTTPS and outbound network/scale settings. Mock tests do not prove actual role grants, private routes or app startup.
 
 ### 4. Visible local evidence
-
-![Executed package checks](docs/images/02-validation.png)
 
 Screenshots come from actual local code using fictional archive inputs. They do not show an Azure deployment. Node build/handler, HTTP-harness and Terraform results are recorded separately in [validation](docs/VALIDATION.md).
 
