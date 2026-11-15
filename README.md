@@ -45,6 +45,19 @@ The local handler harness and packaging checks remain separate from a hosted Fun
 
 ## Step by Step
 
+Build an independent version with the [reader-operated walkthrough](docs/BUILD-YOUR-OWN.md). It gives prerequisites, working locations, numbered actions, source-derived commands, expected results, verification and cleanup.
+
+For this project, your working starting point is [`config/function-shields.json`](config/function-shields.json). Expected scope: A checked API package and local health handler; no Azure Functions publication.
+
+1. **Create your own workspace.** Copy the project and record the source version before editing.
+2. **Prepare and run the baseline.** Use the documented runtimes and selected dependencies, then run the local checks.
+3. **Make your own change.** Edit a project-specific fixture, configuration or rule and rerun its positive and negative cases.
+4. **Verify and document your result.** Capture your own evidence and distinguish a local example from a live integration.
+5. **Extend and close out deliberately.** Plan any independent cloud work separately and clean up only what you created.
+
+<details>
+<summary>How the underlying platform process works</summary>
+
 A short walkthrough of the process, with technical instructions and evidence limits in the sections below.
 
 1. **Prepare the server code (TypeScript)** — Select the reviewed version and its recorded software dependencies. Build and test the server functions that belong in the release.
@@ -54,6 +67,8 @@ A short walkthrough of the process, with technical instructions and evidence lim
 3. **Publish the tested package (GitHub Actions)** — The platform release process sends the verified package to Azure Functions. Settings that activate email or background work remain separate from publishing code.
 
 4. **Verify the release** — Check service health and compare the published package with the intended version. This public project tests packaging locally and does not publish a live service.
+
+</details>
 
 ## Architecture
 
