@@ -65,7 +65,12 @@ func new --template "HTTP trigger" --name health --authlevel anonymous
 
 **Where:** The generated function file under src/functions.
 
-Replace the generated HTTP function with the code below and confirm package.json main includes that directory. Keep the response limited to service health; never expose environment variables, tokens or database strings.
+Replace the generated HTTP function with the code below and confirm package.json main includes that directory. Keep the response limited to service health; never expose environment variables, tokens or database strings. Explicitly select CommonJS for the require-based handler and retain the generated package-lock.json.
+
+```bash
+npm pkg set type=commonjs 'main=src/functions/*.js'
+npm install --save-exact @azure/functions@4
+```
 
 Create **`src/functions/health.js`** with the following contents:
 
@@ -81,18 +86,40 @@ app.http('health', {
 
 ## Step 3 — Run your local host
 
-**Where:** Two workstation terminals.
+**Where:** Project root, two running-server terminals and a browser or third terminal.
 
-Start Azurite in a separate terminal and confirm the ignored local.settings.json uses your local emulator connection. Run func start, then request /api/health on the port printed by Core Tools.
+Create the local-only settings below in this new project. Install Azurite in an isolated tooling folder, exclude its files and emulator data from Git and Functions publication, then leave the emulator running in terminal 1. In terminal 2, return to the same project root and start the Functions host; use a browser or terminal 3 for the health request. These Bash commands also work in Git Bash on Windows; use curl.exe if running the request in PowerShell.
+
+Create **`local.settings.json`** with the following contents:
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+  }
+}
+```
 
 ```bash
-npm install
+# Terminal 1, from the project root:
+mkdir -p .tools/azurite .azurite
+npm install --prefix .tools/azurite --save-exact azurite
+printf '\n.tools/\n.azurite/\nlocal.settings.json\n' >> .gitignore
+printf '\n.tools/\n.azurite/\nlocal.settings.json\n' >> .funcignore
+./.tools/azurite/node_modules/.bin/azurite --location .azurite --debug .azurite/debug.log
+
+# Terminal 2, same project root:
 func start
-# In a second terminal:
+
+# Terminal 3, or open this URL in your browser:
 curl -i http://localhost:7071/api/health
 ```
 
-**Check before continuing:** A real Functions host returns your JSON; local settings are excluded from Git.
+If a storage port is already occupied, stop your duplicate emulator or use the existing local instance deliberately. If Core Tools prints another HTTP port, request that port. Keep local.settings.json private and out of the published package; configure real host storage separately in Azure.
+
+**Check before continuing:** Azurite is running locally, Core Tools registers health and GET /api/health returns your JSON. Keep both server terminals open during local testing; stop both with Ctrl+C afterward.
 
 ## Step 4 — Create the Azure host
 
@@ -156,5 +183,6 @@ The numbered steps describe a build procedure. Local syntax checks, an accepted 
 
 - [learn.microsoft.com — create-first-function-cli-node](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-cli-node)
 - [learn.microsoft.com — functions-reference-node](https://learn.microsoft.com/en-us/azure/azure-functions/functions-reference-node)
+- [github.com — Azurite](https://github.com/Azure/Azurite)
 
 The walkthrough layout follows the prerequisites → creation/configuration → test → verification → troubleshooting → cleanup pattern of the [Splunk project reference](https://github.com/davidharris6/splunk-siem-log-analysis). Its Splunk-specific settings are not copied into unrelated projects.
