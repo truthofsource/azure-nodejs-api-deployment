@@ -13,7 +13,7 @@ The author's operational workforce API health/build/host source, release-package
 ## Related projects
 
 - [Identity and application authorization](https://github.com/truthofsource/cloud-identity-access-automation)
-- [Verified artifact delivery and rollback](https://github.com/truthofsource/secure-container-delivery-and-rollback)
+- [Verified artifact delivery and rollback](https://github.com/truthofsource/azure-container-lifecycle/tree/main/examples/signed-container-delivery)
 - [SQL backup and recovery boundaries](https://github.com/truthofsource/azure-sql-backup-and-recovery)
 
 Presentation follows the author's established business-problem, solution, architecture, component, proof, commands and scaling format. The loopback UI is reused from the author's portfolio. No third-party project source/screenshots are copied.

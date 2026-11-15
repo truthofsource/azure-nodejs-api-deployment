@@ -16,6 +16,6 @@ Promote the selected retained artifact, not a rebuild. If the hosting platform r
 
 ## Rollback
 
-Restore a retained compatible package through the reviewed publisher rather than rebuilding an old branch. SQL schema and external operations do not roll back automatically with Node code. [Artifact rollback case study](https://github.com/truthofsource/secure-container-delivery-and-rollback).
+Restore a retained compatible package through the reviewed publisher rather than rebuilding an old branch. SQL schema and external operations do not roll back automatically with Node code. [Artifact rollback case study](https://github.com/truthofsource/azure-container-lifecycle/tree/main/examples/signed-container-delivery).
 
 This project performs no cloud release, app restart, role grant or production activation. A fresh real deployment needs its own exact release file/source checks and runtime acceptance.
